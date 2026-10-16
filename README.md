@@ -1,8 +1,8 @@
 # Technical Teaching Demo
 
-把论文、算法、源码和技术项目制作成**可手算、可操作、可核验**的教学 HTML。首版包含一个 Codex skill、两份按需读取的参考文档，以及无需构建的最小页面模板。
+把论文、算法、源码和技术项目制作成**可手算、可操作、可核验**的教学 HTML；页面已经能用之后，还可以用一层可逆的呈现升级让它更好读、更抓眼。2.0 版包含一个 Codex skill、三份按需读取的参考文档，以及无需构建的最小页面模板。
 
-这套方法从四次技术教学 demo 的制作与交付复盘中提炼：先确定学习目标和证据，完成小规模教学闭环，再验收用户实际打开与操作路径。公开仓库只有原创方法、合成验证材料和新编写模板，不包含原聊天、知识库原文、论文全文或私人项目材料。
+这套方法从四次技术教学 demo 的制作与交付复盘中提炼：先确定学习目标和证据，完成小规模教学闭环，再验收用户实际打开与操作路径；呈现层部分来自四个历史课程的实际视觉改造。公开仓库只有原创方法、合成验证材料和新编写模板，不包含原聊天、知识库原文、论文全文或私人项目材料。
 
 ## 安装到本地 Codex
 
@@ -44,9 +44,12 @@ ln -s "$PWD/technical-teaching-demo" "$skill_install_dir/technical-teaching-demo
 ## 内容与最小模板
 
 - [Skill 入口](technical-teaching-demo/SKILL.md)：目标校准、手算闭环、按需读取和交付要求。
-- [教学设计与证据](technical-teaching-demo/references/teaching-and-evidence.md)：资料定位、陈述分层、有效分支与数值核查。
-- [验收与交付](technical-teaching-demo/references/verification-and-delivery.md)：交互、视觉、访问、恢复和证据边界。
+- [教学设计与证据](technical-teaching-demo/references/teaching-and-evidence.md)：资料定位、陈述分层、有效分支、数值核查与图表规则。
+- [验收与交付](technical-teaching-demo/references/verification-and-delivery.md)：交互、视觉、访问、恢复、呈现层检查和证据边界。
+- [呈现层](technical-teaching-demo/references/presentation-layer.md)：可逆升级层、字体分场景、首屏焦点、图表规范与看图复核。
 - [最小页面](technical-teaching-demo/assets/minimal-demo/index.html)：章节目录、连续正文、加权评分实验、自测和来源边界。
+
+若已安装 `design-taste-frontend`（taste），可在需要视觉方向与看图迭代时配合使用，教学证据和交付约束仍以本 skill 为准。taste 是可选的外部 skill，本仓库不捆绑其代码或要求联网安装；未安装时可直接使用呈现层参考。最小模板仍保持原有轻量示例，2.0 的新增能力主要在教学与呈现指导中。
 
 复制 `assets/minimal-demo/` 到你的课程项目，修改 HTML 正文和 JavaScript 计算。不要直接把安装目录当课程项目。模板可断网打开，不调用模型或外部 API，不保存个人数据。
 
@@ -61,7 +64,7 @@ python3 serve.py
 
 ## 验证与版本
 
-基础交付检查只依赖 Python 标准库：
+当前版本 v2.0.0（[版本说明](CHANGELOG.md)）。基础交付检查只依赖 Python 标准库：
 
 ```sh
 python3 -m unittest discover -s tests -p 'test_*.py'
@@ -75,7 +78,7 @@ node tests/browser.cjs
 
 若模块不在 Node 默认搜索路径，设置 `PLAYWRIGHT_MODULE` 为已有 Playwright 包的绝对路径；若没有 Playwright 下载的浏览器，设置 `CHROME_PATH` 为本机 Chrome 可执行文件。`PYTHON` 可指定 Python，`TEST_OUTPUT` 可指定截图与报告目录。检查脚本不会自动下载浏览器或安装依赖。
 
-结构检查可使用 Codex `skill-creator` 提供的 `quick_validate.py`（该开发工具需要 PyYAML）。详见 [v0.1.0 验证记录](VERIFICATION.md)和[版本说明](CHANGELOG.md)。
+结构检查可使用 Codex `skill-creator` 提供的 `quick_validate.py`（该开发工具需要 PyYAML）。详见 [验证记录](VERIFICATION.md)和[版本说明](CHANGELOG.md)。
 
 模板检查、skill 样例表现、课程技术语义和学习者掌握是不同结论。本仓库的验证不能证明任意未来课程正确，也不代表原论文实验已经复现。四次来源偏论文，通用能力仅在小规模算法与源码任务中作行为验证。
 
