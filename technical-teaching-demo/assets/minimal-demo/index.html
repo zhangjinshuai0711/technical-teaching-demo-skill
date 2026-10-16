@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>加权评分 · 看见一次计算</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="style.css">
+  <script src="demo.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">跳到正文</a>
+  <aside class="sidebar">
+    <a class="brand" href="#intro">看见一次计算<span>技术交互教学 · 最小示例</span></a>
+    <details id="contents" open>
+      <summary>学习目录</summary>
+      <nav aria-label="章节目录">
+        <a href="#intro"><span>01</span>问题与目标</a>
+        <a href="#mechanism"><span>02</span>先手算一次</a>
+        <a href="#lab"><span>03</span>改变权重</a>
+        <a href="#practice"><span>04</span>自测与边界</a>
+        <a href="#evidence"><span>05</span>来源与简化</a>
+      </nav>
+    </details>
+    <p class="sidebar-note">先预测，再操作。<br>解释结果比记住数字更重要。</p>
+  </aside>
+  <main id="main" tabindex="-1">
+    <header id="intro">
+      <p class="label">一个问题 · 一个机制 · 一次验证</p>
+      <h1>权重改变时，<br>结果为什么会变？</h1>
+      <p class="lead">用两个分数和一个权重，走完从手算到交互的闭环。</p>
+      <p>阅读起点：理解百分数与四则运算即可。完成后，你应能手算一个加权分数，并解释权重变化对结果的影响。</p>
+      <a class="start" href="#mechanism">开始手算</a>
+    </header>
+    <section id="mechanism" aria-labelledby="mechanism-title">
+      <p class="section-number">01 / 理解机制</p>
+      <h2 id="mechanism-title">先把一次计算说清楚</h2>
+      <p>把两个同为 0–100 分的指标记作 A、B。权重 w 决定 A 占多少，剩余的 1 − w 分给 B。我们只计算加权分数，不训练或自动选择权重。</p>
+      <div class="formula" role="math" aria-label="S 等于 w 乘 A 加一减 w 乘 B">S = w × A + (1 − w) × B</div>
+      <p>固定 A = 80、B = 50、w = 0.60：</p>
+      <ol class="calculation">
+        <li>A 的贡献：0.60 × 80 = <strong>48</strong>。</li>
+        <li>B 的贡献：0.40 × 50 = <strong>20</strong>。</li>
+        <li>合并：48 + 20 = <strong>68</strong>。</li>
+      </ol>
+      <p class="prompt">先预测：A 比 B 高时，增大 A 的权重，S 会升高还是降低？</p>
+    </section>
+    <section id="lab" aria-labelledby="lab-title">
+      <p class="section-number">02 / 操作与验证</p>
+      <h2 id="lab-title">让参数的变化看得见</h2>
+      <p>移动滑块或用方向键微调。先只改变 w，再尝试把 A 调到低于 B。</p>
+      <form id="experiment">
+        <div class="control"><label for="weight">A 的权重 w <output id="weight-value" for="weight">60%</output></label><input id="weight" type="range" min="0" max="100" step="1" value="60"><p>B 的权重为 1 − w。</p></div>
+        <div class="control"><label for="score-a">分数 A <output id="a-value" for="score-a">80</output></label><input id="score-a" type="range" min="0" max="100" step="1" value="80"></div>
+        <div class="control"><label for="score-b">分数 B <output id="b-value" for="score-b">50</output></label><input id="score-b" type="range" min="0" max="100" step="1" value="50"></div>
+        <div class="result" aria-live="polite" aria-atomic="true">
+          <div class="result-heading"><span>加权分数 S</span><output id="score" for="weight score-a score-b">68.0</output></div>
+          <p id="working">0.60 × 80 + 0.40 × 50 = 68.0</p>
+          <div class="contribution-bar" aria-hidden="true"><span id="part-a" style="width:48%"></span><span id="part-b" style="width:20%"></span></div>
+          <p class="legend">A 贡献 <span id="contribution-a">48.0</span> · B 贡献 <span id="contribution-b">20.0</span>，横条总长以 100 分为满格。</p>
+        </div>
+        <button id="reset" type="reset">恢复初始参数</button>
+      </form>
+      <noscript><p>JavaScript 未启用，交互暂停；上面的固定示例仍可手算，结果为 68 分。</p></noscript>
+    </section>
+    <section id="practice" aria-labelledby="practice-title">
+      <p class="section-number">03 / 自己解释</p>
+      <h2 id="practice-title">关闭答案，再试一次</h2>
+      <ol>
+        <li>A = 80、B = 50、w = 0.25 时，S 是多少？</li>
+        <li>把 w 设为 0 和 1，分别意味着什么？</li>
+        <li>A = B 时，改变 w 还有用吗？如果 A 小于 B 呢？</li>
+      </ol>
+      <details id="self-check">
+        <summary>查看参考答案</summary>
+        <div id="answer">
+          <p>① S = 0.25 × 80 + 0.75 × 50 = <strong>57.5</strong>。</p>
+          <p>② w = 0 时 S = B；w = 1 时 S = A。</p>
+          <p>③ A = B 时结果不变；A 小于 B 时，增大 w 会降低结果。每次 w 增加 0.01，S 改变 0.01 × (A − B)。</p>
+          <p>能不看答案解释这些情况，才是本节的理解证据；展开答案不会记录任何掌握状态。</p>
+        </div>
+      </details>
+    </section>
+    <section id="evidence" aria-labelledby="evidence-title">
+      <p class="section-number">04 / 证据与边界</p>
+      <h2 id="evidence-title">这个示例说明了什么</h2>
+      <dl>
+        <dt>来源</dt><dd>本模板原创教学示例，定义如上式；不是某篇论文的实验报告。实现见同目录 <a href="demo.js">demo.js</a>。</dd>
+        <dt>教学简化</dt><dd>两个指标均为 0–100 分，权重由人手动选择。没有数据拟合、参数学习或真实业务评估。</dd>
+        <dt>可以推出</dt><dd>w 在 0–1 之间时，S 始终位于 A 与 B 之间；A、B 的差决定变化方向。</dd>
+        <dt>不能推出</dt><dd>这个评分一定公平、权重已经最优，或页面检查等于真实实验复现。</dd>
+      </dl>
+    </section>
+    <footer>本地计算 · 无外部请求 · 不保存个人数据<br>用你的教学目标、来源和机制替换这个示例。</footer>
+  </main>
+</body>
+</html>
